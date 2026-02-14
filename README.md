@@ -1,22 +1,14 @@
 # 🤖 RAG Chatbot
 
-[Python](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python&logoColor=white)
+## 🔗 各種リンク(アプリケーションURL・参考資料)
 
-[Streamlit](https://img.shields.io/badge/Streamlit-1.42.0-FF4B4B?logo=streamlit&logoColor=white)
-
-[LangChain](https://img.shields.io/badge/LangChain-0.3-1C3C3C?logo=langchain&logoColor=white)
-
-[GCP](https://img.shields.io/badge/Google_Cloud-Run_%26_Functions-4285F4?logo=googlecloud&logoColor=white)
-
-[License](https://img.shields.io/badge/License-MIT-green)
-
-## 🔗 デモ・ドキュメント
-
-- **アプリケーションデモ:** [👉 RAG Chatbot デモサイト](https://rag-chatbot-787511911100.asia-northeast1.run.app/)
-  - _(※ Cloud Functionsにより毎日22:00 JSTにデータが自動リセットされます)_
-- **説明書:** [📖 ユーザーガイド (docs/user_guide.md)](https://www.notion.so/docs/user_guide.md)
-- **GitHubリポジトリ：** https://github.com/your-repo/rag-chatbot
-- **資料格納先（Google Drive）：** https://drive.google.com/drive/folders/1uBGYifqCWblvLONPyNNK-RdFmYNZD296?usp=sharing
+- **[RAG Chatbot デモサイト](https://rag-chatbot-787511911100.asia-northeast1.run.app/)**
+  - _※ 日次でデータを自動リセットしています。質問などご自由にお試しください。_
+  - _※ コールドスタートのため初回起動の際は時間がかかります。_
+- **[ユーザーガイド](https://www.notion.so/307d5e28de6980b39635ef0226c1dc01?source=copy_link)**
+- **[Googleドライブ（RAG使用資料）](https://drive.google.com/drive/folders/1uBGYifqCWblvLONPyNNK-RdFmYNZD296?usp=sharing)**
+- **[システムフロー図](https://viewer.diagrams.net/?tags=%7B%7D&lightbox=1&target=self&highlight=0000ff&edit=_blank&layers=1&nav=1&title=%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0%E3%83%95%E3%83%AD%E3%83%BC%E5%9B%B3&dark=auto#Uhttps%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1ofEfPXRgYD6ISPqPC8mwLVyPSQCLdcGO%26export%3Ddownload#%7B%22pageId%22%3A%225w3JKShJVbbiZiXe1k3E%22%7D)**
+- **[アーキテクチャ図](https://viewer.diagrams.net/?tags=%7B%7D&lightbox=1&target=blank&highlight=0000ff&edit=_blank&layers=1&nav=1&title=%E3%82%A2%E3%83%BC%E3%82%AD%E3%83%86%E3%82%AF%E3%83%81%E3%83%A3%E5%9B%B3&dark=auto#Uhttps%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1sH6jKtMhl_M5Q7e2QC67yehbxfk3qdST%26export%3Ddownload)**
 
 ---
 
@@ -39,16 +31,6 @@
 | **⚙️ システム** | **会話文脈の永続化**     | Firestore をバックエンドに使用し、ブラウザのリロードやセッション切れが発生しても、直前の文脈を完全に復元します。         |
 |                 | **起動プロセスの高速化** | DB接続やモデルロードなどの重い初期化処理をキャッシュし、2回目以降の動作を高速化します。                                  |
 |                 | **デモデータの自動復旧** | デモ環境の健全性を保つため、毎日定時にデータをリセットし、テンプレートデータを再投入するバッチ処理を稼働させています。   |
-
----
-
-## 🏗 システムアーキテクチャ
-
-保守性と拡張性を高めるため、**「責務の分離」と「依存性の注入 (DI)」**を意識した設計を行いました。
-
-### アーキテクチャ図
-
-https://viewer.diagrams.net/?tags=%7B%7D&lightbox=1&target=blank&highlight=0000ff&edit=_blank&layers=1&nav=1&title=%E3%82%A2%E3%83%BC%E3%82%AD%E3%83%86%E3%82%AF%E3%83%81%E3%83%A3%E5%9B%B3&dark=auto#Uhttps%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1sH6jKtMhl_M5Q7e2QC67yehbxfk3qdST%26export%3Ddownload
 
 ---
 
