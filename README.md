@@ -3,8 +3,8 @@
 ## 🔗 各種リンク(アプリケーションURL・参考資料)
 
 - **[RAG Chatbot デモサイト](https://rag-chatbot-787511911100.asia-northeast1.run.app/)**
-  - _※ 日次でデータを自動リセットしています。質問などご自由にお試しください。_
-  - _※ コールドスタートのため初回起動の際は時間がかかります。_
+  _※ 日次でデータを自動リセットしています。質問などご自由にお試しください。_
+  _※ コールドスタートのため初回起動の際は時間がかかります。_
 - **[ユーザーガイド](https://www.notion.so/307d5e28de6980b39635ef0226c1dc01?source=copy_link)**
 - **[Googleドライブ（RAG使用資料）](https://drive.google.com/drive/folders/1uBGYifqCWblvLONPyNNK-RdFmYNZD296?usp=sharing)**
 - **[システムフロー図](https://viewer.diagrams.net/?tags=%7B%7D&lightbox=1&target=self&highlight=0000ff&edit=_blank&layers=1&nav=1&title=%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0%E3%83%95%E3%83%AD%E3%83%BC%E5%9B%B3&dark=auto#Uhttps%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1ofEfPXRgYD6ISPqPC8mwLVyPSQCLdcGO%26export%3Ddownload#%7B%22pageId%22%3A%225w3JKShJVbbiZiXe1k3E%22%7D)**
