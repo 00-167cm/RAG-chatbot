@@ -1,0 +1,17 @@
+# バックアップ
+bk/
+
+# シークレットキー等
+secrets/
+
+# 仮想環境
+venv/
+
+# ベクトルDB
+data/chroma_db/*
+data/documents/*
+!data/chroma_db/.gitkeep
+!data/documents/.gitkeep
+
+# キャッシュ
+__pycache__/
