@@ -19,9 +19,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 # アプリケーションのコードをすべてコピー
 COPY . .
 
-# ベクトル化済みのchroma_dbをイメージに含める
-COPY data/chroma_db ./data/chroma_db
-
 # Streamlitのポート8080を公開
 EXPOSE 8080
 
