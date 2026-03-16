@@ -16,7 +16,10 @@ import streamlit as st
 from typing import Dict, List, Any, Optional
 import shortuuid
 
-from config.settings import GOOGLE_DRIVE_FOLDER_URL, MIN_VALUE, MAX_VALUE, STEP
+from config.settings import (
+    GD_FOLDER_ID, MIN_VALUE, MAX_VALUE, STEP,
+    MAIN_TITLE, SIDEBAR_TITLE, RAG_SETTINGS_TITLE, NEW_CHAT_TITLE
+)
 from infrastructure.rag_manager import RAGManager
 from chat.chat_manager import ChatManager
 from chat.langchain_manager import LangChainManager
@@ -121,11 +124,11 @@ class GUI:
             return False
     
     def _render_title(self): 
-        st.title("RAGチャットボット")
+        st.title(MAIN_TITLE)
     
     def _render_sidebar(self):
         """サイドバー（チャット履歴・RAG設定）を表示"""
-        st.sidebar.title("💬 チャット履歴")
+        st.sidebar.title(SIDEBAR_TITLE)
         
         chat_list = self.chat_manager.chat_list
         
@@ -137,11 +140,11 @@ class GUI:
         
         # 新規チャット作成ボタン
         if st.sidebar.button(
-            "➕ 新規チャット", 
+            f"➕ {NEW_CHAT_TITLE}", 
             key="new_chat_button", 
             use_container_width=True,
             disabled=has_empty_chat,
-            help="💬 空のチャットがあります。メッセージを送ってから新規作成してね！" if has_empty_chat else None
+            help=f"💬 空のチャットがあります。メッセージを送ってから新規作成してね！" if has_empty_chat else None
         ):
             self._create_new_chat()
             st.rerun()
@@ -157,7 +160,7 @@ class GUI:
         # RAG設定セクション
         if self.rag_manager:
             st.sidebar.divider()
-            st.sidebar.subheader("📚 RAG設定")
+            st.sidebar.subheader(RAG_SETTINGS_TITLE)
             
             status = self.rag_manager.get_status()
             
@@ -180,15 +183,15 @@ class GUI:
                 st.toast(f"閾値を {new_threshold} に更新しました", icon="✅")
             
             # 資料格納先リンク
-            if GOOGLE_DRIVE_FOLDER_URL:
+            if GD_FOLDER_ID:
                 st.sidebar.markdown(
-                    f"📁 [**資料格納先に移動**]({GOOGLE_DRIVE_FOLDER_URL})",
+                    f"📁 [**資料格納先に移動**](https://drive.google.com/drive/folders/{GD_FOLDER_ID})",
                     unsafe_allow_html=True
                 )
     
     def _create_new_chat(self):
         """新しいチャットをメモリ上に作成（Firestoreには最初のメッセージ送信時に保存）"""
-        new_title = "新規チャット"
+        new_title = NEW_CHAT_TITLE
         new_id = shortuuid.uuid()
         new_chat = {"id": new_id, "title": new_title}
         
@@ -207,7 +210,7 @@ class GUI:
         selected_title = self.chat_manager.get_chat_title_by_id(
             st.session_state.current_chat["id"]
         )
-        if not selected_title.startswith("新規チャット"):
+        if not selected_title.startswith(NEW_CHAT_TITLE):
             st.subheader(f"📂 {selected_title}")
     
     def _render_chat_history(self):
@@ -224,26 +227,27 @@ class GUI:
                     self._render_response_mode_info(chat)
     
     def _render_response_mode_info(self, chat: Dict[str, Any]):
-        """AI応答のモード情報（RAG/通常）を表示"""
-        if chat.get("is_rag") and chat.get("chunks"):
-            st.info("📚 **RAGモード**: 資料を参照して回答を生成しました")
-            with st.expander("📖 参照した資料の詳細を見る", expanded=False):
-                for i, chunk in enumerate(chat["chunks"], 1):
-                    source = chunk.get('source', '不明')
-                    drive_link = self.rag_manager.get_google_drive_link(source) if self.rag_manager else ""
-                    
-                    if drive_link:
-                        st.markdown(f"**[{i}]** [{source}]({drive_link}) 📄")
-                    else:
-                        st.markdown(f"**[{i}]** {source}")
+            """AI応答のモード情報（RAG/通常）を表示"""
+            if chat.get("is_rag") and chat.get("chunks"):
+                st.info("📚 **RAGモード**: 資料を参照して回答を生成しました")
+                with st.expander("📖 参照した資料の詳細を見る", expanded=False):
+                    for i, chunk in enumerate(chat["chunks"], 1):
+                        source = chunk.get('source', '不明')
+                        page = chunk.get('page', '?')
+                        drive_link = self.rag_manager.get_google_drive_link(source, chunk) if self.rag_manager else ""
 
-                    score = chunk.get('distance', 0)
-                    st.markdown(f"**類似度スコア**: {score:.4f} (スコアが低いほど関連性が高い)")
+                        if drive_link:
+                            st.markdown(f"**[{i}]** [{source}]({drive_link}) (ページ {page}) 📄")
+                        else:
+                            st.markdown(f"**[{i}]** {source} (ページ {page})")
 
-                    if i < len(chat["chunks"]):
-                        st.divider()
-        else:
-            st.info("💬 **通常モード**: RAG資料に関連情報がないため、一般知識で回答しました")
+                        score = chunk.get('distance', 0)
+                        st.markdown(f"**類似度スコア**: {score:.4f} (スコアが低いほど関連性が高い)")
+
+                        if i < len(chat["chunks"]):
+                            st.divider()
+            else:
+                st.info("💬 **通常モード**: RAG資料に関連情報がないため、一般知識で回答しました")
     
     def _render_chat_input(self):
         """チャット入力欄を表示し、ユーザー入力を処理"""
@@ -335,7 +339,7 @@ class GUI:
                 for i, doc in enumerate(search_results, 1):
                     source = doc['metadata'].get('source', '不明')
                     page = doc['metadata'].get('page', '?')
-                    drive_link = self.rag_manager.get_google_drive_link(source)
+                    drive_link = self.rag_manager.get_google_drive_link(source, doc['metadata'])
                     
                     if drive_link:
                         st.markdown(f"**[{i}]** [{source}]({drive_link}) (ページ {page}) 📄")
@@ -356,7 +360,9 @@ class GUI:
             {
                 "chunk_id": f"{doc['metadata'].get('source', '')}_{doc['metadata'].get('page', '')}_{doc['metadata'].get('chunk_index', '')}",
                 "distance": doc['distance'],
-                "source": doc['metadata'].get('source', '不明')
+                "source": doc['metadata'].get('source', '不明'),
+                "page": doc['metadata'].get('page', '?'),
+                "drive_url": doc['metadata'].get('drive_url', '')
             }
             for doc in search_results
         ]

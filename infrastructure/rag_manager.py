@@ -17,8 +17,8 @@ from config.settings import (
     CHUNK_SIZE,
     CHUNK_OVERLAP,
     RAG_THRESHOLD,
-    GOOGLE_DRIVE_LINKS,
-    TOP_K_RESULTS
+    TOP_K_RESULTS,
+    COLLECTION_NAME
 )
 
 class RAGManager:
@@ -37,7 +37,7 @@ class RAGManager:
         self,
         documents_path: str = "data/documents",
         chroma_path: str = "data/chroma_db",
-        collection_name: str = "acom_documents",
+        collection_name: str = COLLECTION_NAME,
         chunk_size: int = CHUNK_SIZE,
         chunk_overlap: int = CHUNK_OVERLAP,
         threshold: float = RAG_THRESHOLD
@@ -246,15 +246,14 @@ class RAGManager:
             "threshold": self.threshold
         }
     
-    def get_google_drive_link(self, filename: str) -> str:
+    def get_google_drive_link(self, filename: str, metadata: dict = None) -> str:
         """
-        ファイル名に対応するGoogleドライブのURLを返す
-        
-        例：
-            入力: "顧客属性別審査ルール集.pdf"
-            戻り値: "https://drive.google.com/..."
+        メタデータからGoogleドライブのURLを返す
+        メタデータにdrive_urlがない場合（ローカルモード）は空文字を返す
         """
-        return GOOGLE_DRIVE_LINKS.get(filename, "")
+        if metadata and metadata.get("drive_url"):
+            return metadata["drive_url"]
+        return ""
     
     def reload_documents(self) -> bool:
         """ドキュメントを再読み込み"""

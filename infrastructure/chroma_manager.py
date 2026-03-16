@@ -14,7 +14,7 @@ from pathlib import Path
 import chromadb
 from chromadb.config import Settings
 from langchain_openai import OpenAIEmbeddings
-from config.settings import EMBEDDING_MODEL,RAG_THRESHOLD,TOP_K_RESULTS
+from config.settings import EMBEDDING_MODEL,RAG_THRESHOLD,TOP_K_RESULTS, COLLECTION_NAME
 
 class ChromaManager:
     """
@@ -32,7 +32,7 @@ class ChromaManager:
     def __init__(
         self,
         persist_directory: str = "data/chroma_db",
-        collection_name: str = "acom_documents"
+        collection_name: str = COLLECTION_NAME
     ):
         """
         ChromaManager初期化
@@ -56,7 +56,8 @@ class ChromaManager:
         
         self.collection = self.client.get_or_create_collection(
             name=collection_name,
-            metadata={"description": "さくら金融 横浜センター 業務ルール資料"}
+            metadata={"description": "RAG検索用ドキュメントコレクション"}
+
         )
         
         self.embeddings = OpenAIEmbeddings(
@@ -253,7 +254,7 @@ class ChromaManager:
         Returns:
             コレクション情報
             {
-                "name": "acom_documents",
+                "name": "rag_documents",
                 "chunk_count": 18,
                 "file_count": 3,
                 "persist_directory": "data/chroma_db"
@@ -278,7 +279,8 @@ class ChromaManager:
             self.client.delete_collection(self.collection_name)
             self.collection = self.client.create_collection(
                 name=self.collection_name,
-                metadata={"description": "さくら金融 横浜センター 業務ルール資料"}
+                metadata={"description": "RAG検索用ドキュメントコレクション"}
+
             )
             print(f"✅ コレクション '{self.collection_name}' をクリアしました")
             return True
