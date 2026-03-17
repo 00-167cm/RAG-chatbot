@@ -49,7 +49,7 @@ COLLECTION_NAME = "rag_documents"
 # 取り込み方法の切り替え
 # "local" → ローカルフォルダから取り込み
 # "gd"    → Google Driveから取り込み
-DOC_SOURCE = "local"
+DOC_SOURCE = "gd"
 
 # ローカル取り込み時のパス
 LOCAL_DOC_PATH = PROJECT_ROOT / "data" / "documents"
